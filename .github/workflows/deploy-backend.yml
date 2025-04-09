@@ -3,9 +3,7 @@ name: Deploy Flask Backend to ECS
 on:
   push:
     paths:
-      - 'app.py'
-      - 'Dockerfile'
-      - 'requirements.txt'
+      - 'backend/app.py'
     branches:
       - main  # or your deployment branch
 
