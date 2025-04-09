@@ -3,6 +3,7 @@ resource "aws_s3_bucket" "mybucket" {
   bucket = var.bucketname
 }
 
+# Configure public access settings for the S3 bucket
 resource "aws_s3_bucket_public_access_block" "public_access_block" {
   bucket = aws_s3_bucket.mybucket.id
 
@@ -12,12 +13,14 @@ resource "aws_s3_bucket_public_access_block" "public_access_block" {
   restrict_public_buckets = false
 }
 
+# Define an S3 bucket policy to allow public read access to objects 
 resource "aws_s3_bucket_policy" "allow_public_read" {
   bucket = aws_s3_bucket.mybucket.id
   policy = data.aws_iam_policy_document.allow_public_read.json
   depends_on = [aws_s3_bucket_public_access_block.public_access_block]
 }
 
+# IAM policy document granting public read access to objects in the bucket
 data "aws_iam_policy_document" "allow_public_read" {
     statement {
       sid    = "PublicReadGetObject"
@@ -63,6 +66,7 @@ resource "aws_s3_object" "build" {
   )
 }
 
+# Enable static website hosting for the S3 bucket
 resource "aws_s3_bucket_website_configuration" "website" {
   bucket = aws_s3_bucket.mybucket.id
 

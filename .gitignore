@@ -30,3 +30,7 @@
 # .tfstate files
 *.tfstate
 *.tfstate.*
+
+email-config.json
+
+.github
