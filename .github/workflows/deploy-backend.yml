@@ -25,8 +25,7 @@ jobs:
         run: aws ecr get-login-password | docker login --username AWS --password-stdin 851617285991.dkr.ecr.us-east-1.amazonaws.com
 
       - name: Build, tag, and push Docker image
-        id: build-publish
-        shell: bash
-        run: IMAGE_URI=851617285991.dkr.ecr.us-east-1.amazonaws.com/backend-repo \
-          /usr/bin/docker build -t $IMAGE_URI:latest . \
-          /usr/bin/docker push $IMAGE_URI:latest
+        env: IMAGE_URI: 851617285991.dkr.ecr.us-east-1.amazonaws.com/backend-repo
+        run: |
+          docker build --provenance false -t $IMAGE_URI:latest .
+          docker push $IMAGE_URI:latest
