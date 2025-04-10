@@ -1,44 +1,11 @@
-name: Deploy Flask Backend to ECS
+# .github/workflows/test.yml
+name: Test Workflow
 
-on:
-  push:
-    paths:
-      - 'backend/app.py'
-    branches:
-      - main  # or your deployment branch
+on: [push]
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up Docker
-      uses: docker/setup-buildx-action@v2
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
-
-    - name: Log in to Amazon ECR
-      id: login-ecr
-      run: |
-        aws ecr get-login-password | docker login --username AWS --password-stdin 851617285991.dkr.ecr.us-east-1.amazonaws.com
-
-    - name: Build, tag, and push Docker image
-      run: |
-        IMAGE_URI=851617285991.dkr.ecr.us-east-1.amazonaws.com/backend-repo
-        docker build --provenance false -t $IMAGE_URI:latest .
-        docker push $IMAGE_URI:latest
-
-    - name: Update ECS Service with new image
-      run: |
-        aws ecs update-service \
-          --cluster flask-app-cluster \
-          --service flask-app-service \
-          --force-new-deployment
+      - name: Say Hello
+        run: echo "👋 Hello from GitHub Actions!"
