@@ -28,5 +28,5 @@ jobs:
         env:
           IMAGE_URI: 851617285991.dkr.ecr.us-east-1.amazonaws.com/backend-repo
         run: |
-          docker build -t $IMAGE_URI:latest .
+          docker build -f backend/app.py -t $IMAGE_URI:latest .
           docker push $IMAGE_URI:latest
