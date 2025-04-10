@@ -1,7 +1,10 @@
 # .github/workflows/test.yml
 name: Test Workflow
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'backend/**'
 
 jobs:
   test:
