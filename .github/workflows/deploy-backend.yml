@@ -1,4 +1,5 @@
 name: Deploy Flask Backend to ECS
+
 on:
   push:
     paths:
