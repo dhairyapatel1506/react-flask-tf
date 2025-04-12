@@ -1,0 +1,79 @@
+name: Deploy Application
+on:
+  push:
+    paths:
+      - 'backend/**'
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      
+      - name: Log in to Amazon ECR
+        run: aws ecr get-login-password | docker login --username AWS --password-stdin 851617285991.dkr.ecr.us-east-1.amazonaws.com
+
+      - name: Build, tag, and push Docker image
+        env:
+          IMAGE_URI: 851617285991.dkr.ecr.us-east-1.amazonaws.com/backend-repo
+        run: |
+          docker build -f backend/Dockerfile -t $IMAGE_URI:latest backend
+          docker push $IMAGE_URI:latest
+
+      - name: Initialize Terraform (Backend)
+        run: terraform -chdir=terraform/backend init
+
+      - name: Apply Terraform (Backend)
+        run: terraform -chdir=terraform/backend apply -auto-approve
+
+      - name: Get ALB DNS from Terraform output
+        id: alb_output
+        run: echo "alb_dns=$(terraform -chdir=terraform/backend output -raw alb_dns_name)" >> $GITHUB_ENV
+
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update config.json with ALB DNS
+        run: |
+          echo "{ \"backendUrl\": \"http://${{ env.alb_dns }}\" }" > src/config.json
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ''
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the app
+        run: npm run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy to S3
+        run: |
+          aws s3 sync build/ s3://my-tf-static-website-bucket-26032025 --delete
