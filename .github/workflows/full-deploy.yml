@@ -36,7 +36,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Initialize Terraform (Backend)
-        run: terraform -chdir=terraform/backend init
+        run: terraform -chdir=terraform/backend init -reconfigure
 
       - name: Apply Terraform (Backend)
         run: terraform -chdir=terraform/backend apply -auto-approve
@@ -83,7 +83,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Initialize Terraform (Frontend)
-        run: terraform -chdir=terraform/frontend init
+        run: terraform -chdir=terraform/frontend init -reconfigure
 
       - name: Apply Terraform (Frontend)
         run: terraform -chdir=terraform/frontend apply -auto-approve

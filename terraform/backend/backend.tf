@@ -1,3 +1,12 @@
+terraform {
+  backend "s3" {
+    bucket         = "my-terraform-state-bucket-dev-26032025"
+    key            = "backend/terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
+  }
+}
+
 # Create custom VPC
 resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
