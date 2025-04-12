@@ -33,7 +33,7 @@ jobs:
           docker push $IMAGE_URI:latest
 
       - name: Install Terraform
-        uses: hashicorp/setup-terraform@v4
+        uses: hashicorp/setup-terraform@v3
 
       - name: Initialize Terraform (Backend)
         run: terraform -chdir=terraform/backend init
