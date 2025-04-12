@@ -29,7 +29,6 @@ jobs:
 
   destroy-frontend:
     runs-on: ubuntu-latest
-    needs: destroy-backend  # ensure backend is destroyed first
 
     steps:
       - name: Checkout code
