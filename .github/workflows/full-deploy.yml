@@ -56,6 +56,7 @@ jobs:
       - name: Update config.json with ALB DNS
         run: |
           echo "{ \"backendUrl\": \"http://${{ env.alb_dns }}\" }" > src/config.json
+        working-directory: frontend
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
