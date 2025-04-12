@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-    alb_dns: ${{ steps.alb_output.outputs.alb_dns_name }}
+      alb_dns: ${{ steps.alb_output.outputs.alb_dns_name }}
 
     steps:
       - uses: actions/checkout@v4
@@ -59,7 +59,7 @@ jobs:
 
       - name: Update config.json with ALB DNS
         run: |
-          echo "{ \"backendUrl\": \"http://${{ needs.deploy-backend.outputs.alb_dns_name  }}\" }" > src/config.json
+          echo "{ \"backendUrl\": \"http://${{ needs.deploy-backend.outputs.alb_dns  }}\" }" > src/config.json
         working-directory: frontend
 
       - name: Set up Node.js
