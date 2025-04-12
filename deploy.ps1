@@ -50,4 +50,4 @@ terraform -chdir=terraform/frontend apply -auto-approve
 
 Write-Host "Deployment Complete!"
 
-Send-MailMessage -From $EmailFrom -To $EmailTo -Subject $Subject -Body $Body -SmtpServer $SMTPServer -Port $SMTPPort -Credential $Credential -UseSsl
+Send-MailMessage -From $EmailFrom -To $EmailTo -Subject "Resources Created" -Body "Resources created successfully!" -SmtpServer $SMTPServer -Port $SMTPPort -Credential $Credential -UseSsl

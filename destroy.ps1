@@ -16,4 +16,4 @@ $Credential = New-Object System.Management.Automation.PSCredential($Username, $S
 terraform -chdir=terraform/frontend destroy -auto-approve
 terraform -chdir=terraform/backend destroy -auto-approve
 
-Send-MailMessage -From $EmailFrom -To $EmailTo -Subject $Subject -Body $Body -SmtpServer $SMTPServer -Port $SMTPPort -Credential $Credential -UseSsl
+Send-MailMessage -From $EmailFrom -To $EmailTo -Subject "Resources Destroyed" -Body "Resources destroyed successfully!" -SmtpServer $SMTPServer -Port $SMTPPort -Credential $Credential -UseSsl
