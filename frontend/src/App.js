@@ -25,9 +25,9 @@ function App() {
 
   return (
     <div className="container">
-      <h1 className="heading">You are currently viewing the frontend.</h1>
+      <h1 className="heading">You are viewing the frontend.</h1>
       <div className="content">
-        <p className="info">Need a smile? Click here for a quick mood lifter!</p>
+        <p className="info">Need some smiles? Click here for a quick mood lifter!</p>
         <button className="button" onClick={handleClick} disabled={loading}>
           {loading ? 'Loading...' : 'Click'}
         </button>
