@@ -21,7 +21,7 @@ resource "aws_internet_gateway" "igw" {
   tags = { Name = "${var.app_name}-igw" }
 }
 
-# Create Public Subnets (example for 2 AZs)
+# Create Public Subnets
 resource "aws_subnet" "public_subnet_1" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.1.0/24"
@@ -231,14 +231,15 @@ resource "aws_ecs_task_definition" "flask_task" {
 # Create a Security Group for ECS Service
 resource "aws_security_group" "ecs_sg" {
   name        = "${var.app_name}-sg"
-  description = "Allow inbound traffic for Flask App"
+  description = "Allow traffic from ALB only"
   vpc_id      = aws_vpc.main.id
 
   ingress {
     from_port   = var.container_port
     to_port     = var.container_port
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    security_groups = [aws_security_group.alb_sg.id]
+    description     = "Allow traffic from ALB"
   }
 
   egress {
