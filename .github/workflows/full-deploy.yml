@@ -23,16 +23,16 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: <your-region>
+          aws-region: us-east-1
       
       - name: Log in to Amazon ECR
         run: aws ecr get-login-password | 
           docker login --username AWS --password-stdin 
-          <your-Account-ID-without-the-dashes>.dkr.ecr.<your-region>.amazonaws.com
+          851617285991.dkr.ecr.us-east-1.amazonaws.com
 
       - name: Build, tag, and push Docker image
         env:
-          IMAGE_URI: <your-Account-ID-without-the-dashes>.dkr.ecr.<your-region>.amazonaws.com/backend-repo
+          IMAGE_URI: 851617285991.dkr.ecr.us-east-1.amazonaws.com/backend-repo
         run: |
           docker build -f backend/Dockerfile -t $IMAGE_URI:latest backend
           docker push $IMAGE_URI:latest
