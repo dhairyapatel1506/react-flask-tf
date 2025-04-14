@@ -23,14 +23,16 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-region: <your-region>
       
       - name: Log in to Amazon ECR
-        run: aws ecr get-login-password | docker login --username AWS --password-stdin 851617285991.dkr.ecr.us-east-1.amazonaws.com
+        run: aws ecr get-login-password | 
+          docker login --username AWS --password-stdin 
+          <your-Account-ID-without-the-dashes>.dkr.ecr.<your-region>.amazonaws.com
 
       - name: Build, tag, and push Docker image
         env:
-          IMAGE_URI: 851617285991.dkr.ecr.us-east-1.amazonaws.com/backend-repo
+          IMAGE_URI: <your-Account-ID-without-the-dashes>.dkr.ecr.<your-region>.amazonaws.com/backend-repo
         run: |
           docker build -f backend/Dockerfile -t $IMAGE_URI:latest backend
           docker push $IMAGE_URI:latest
@@ -46,7 +48,8 @@ jobs:
 
       - name: Get ALB DNS from Terraform output
         id: alb_output
-        run: echo "alb_dns_name=$(terraform -chdir=terraform/backend output -raw alb_dns_name)" >> $GITHUB_OUTPUT
+        run: echo "alb_dns_name=$(terraform -chdir=terraform/backend output -raw alb_dns_name)" 
+          >> $GITHUB_OUTPUT
 
 
   deploy-frontend:
@@ -59,7 +62,8 @@ jobs:
 
       - name: Update config.json with ALB DNS
         run: |
-          echo "{ \"backendUrl\": \"http://${{ needs.deploy-backend.outputs.alb_dns  }}\" }" > src/config.json
+          echo "{ \"backendUrl\": \"http://${{ needs.deploy-backend.outputs.alb_dns  }}\" }" 
+          > src/config.json
         working-directory: frontend
 
       - name: Set up Node.js
