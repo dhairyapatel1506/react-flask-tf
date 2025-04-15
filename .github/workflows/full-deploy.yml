@@ -69,6 +69,13 @@ jobs:
       - name: Apply Terraform (Backend)
         run: terraform -chdir=terraform/backend apply -auto-approve
 
+      - name: Force ECS Service redeployment
+        run: |
+          aws ecs update-service \
+            --cluster flask-app-cluster \
+            --service flask-app-service \
+            --force-new-deployment
+
       - name: Get ALB DNS from Terraform output
         id: alb_output
         run: echo "alb_dns_name=$(terraform -chdir=terraform/backend output -raw alb_dns_name)" 
