@@ -61,7 +61,7 @@ jobs:
 
       - name: Update config.json with ALB DNS
         run: |
-          echo "{ \"backendUrl\": \"http://${{ needs.deploy-backend.outputs.alb_dns  }}\" }" \ 
+          echo "{ \"backendUrl\": \"http://${{ needs.deploy-backend.outputs.alb_dns  }}\" }" \
           > src/config.json
         working-directory: frontend
 
