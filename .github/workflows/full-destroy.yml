@@ -18,6 +18,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      - name: Empty ECR repository
+        run: |
+          REPO_NAME="backend-repo"
+          IMAGE_TAGS=$(aws ecr list-images --repository-name $REPO_NAME --query 'imageIds[*]' --output json)
+
+          if [ "$IMAGE_TAGS" != "[]" ]; then
+            aws ecr batch-delete-image --repository-name $REPO_NAME --image-ids "$IMAGE_TAGS"
+          fi
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
