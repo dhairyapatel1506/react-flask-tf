@@ -7,15 +7,6 @@ terraform {
   }
 }
 
-# Create ECR repo
-resource "aws_ecr_repository" "backend_repo" {
-  name = "backend-repo"
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-  image_tag_mutability = "MUTABLE"
-}
-
 # Create custom VPC
 resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"

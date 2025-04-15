@@ -6,8 +6,22 @@ on:
       - 'frontend/**'
 
 jobs:
+  setup-ecr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Initialize Terraform (ECR)
+        run: terraform -chdir=terraform/ecr init -reconfigure
+
+      - name: Apply Terraform (Frontend)
+        run: terraform -chdir=terraform/ecr apply -auto-approve
+
   deploy-backend:
     runs-on: ubuntu-latest
+    needs: setup-ecr
 
     outputs:
       alb_dns: ${{ steps.alb_output.outputs.alb_dns_name }}
