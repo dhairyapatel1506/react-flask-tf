@@ -21,10 +21,18 @@ jobs:
       - name: Empty ECR repository
         run: |
           REPO_NAME="backend-repo"
-          IMAGE_TAGS=$(aws ecr list-images --repository-name $REPO_NAME --query 'imageIds[*]' --output json)
 
-          if [ "$IMAGE_TAGS" != "[]" ]; then
-            aws ecr batch-delete-image --repository-name $REPO_NAME --image-ids "$IMAGE_TAGS"
+          # Check if the ECR repository exists
+          if aws ecr describe-repositories --repository-names "$REPO_NAME" > /dev/null 2>&1; then
+          echo "Repository exists. Proceeding to delete images..."
+
+            IMAGE_TAGS=$(aws ecr list-images --repository-name $REPO_NAME --query 'imageIds[*]' --output json)
+
+            if [ "$IMAGE_TAGS" != "[]" ]; then
+              aws ecr batch-delete-image --repository-name $REPO_NAME --image-ids "$IMAGE_TAGS"
+            fi
+          else
+            echo "ECR repository $REPO_NAME does not exist."
           fi
 
       - name: Setup Terraform
