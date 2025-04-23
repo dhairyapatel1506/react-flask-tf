@@ -7,7 +7,7 @@ CORS(app)
 
 @app.route('/')
 def index():
-    return 'Service is Healthy!!'
+    return 'Service is Healthy!'
 
 @app.route('/api/getJoke', methods=['GET'])
 def send_request():
