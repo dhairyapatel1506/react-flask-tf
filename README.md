@@ -1,8 +1,10 @@
 # Description
 Deploy a React frontend and Flask backend on AWS using **Terraform** and **GitHub Actions**.
 
+## Flow
 <img src="https://github.com/user-attachments/assets/8c02cb6f-61c0-474b-88f6-7838dab2ce14" />
 
+## Infrastructure Overview
 <img width=963 alt="react-flask-tf" src="https://github.com/user-attachments/assets/db1d3507-0cb3-48ec-8db0-1a0eb029800d" />
 
 # Infrastructure Components
